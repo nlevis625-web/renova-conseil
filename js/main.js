@@ -19,7 +19,7 @@
   var cookieBanner = document.getElementById("cookieBanner");
   var acceptCookies = document.getElementById("acceptCookies");
 
-  if (cookieBanner && !localStorage.getItem("renovia_cookies")) {
+  if (cookieBanner && !localStorage.getItem("renova_cookies")) {
     cookieBanner.classList.remove("hidden");
   } else if (cookieBanner) {
     cookieBanner.classList.add("hidden");
@@ -27,7 +27,7 @@
 
   if (acceptCookies) {
     acceptCookies.addEventListener("click", function () {
-      localStorage.setItem("renovia_cookies", "1");
+      localStorage.setItem("renova_cookies", "1");
       cookieBanner.classList.add("hidden");
     });
   }
