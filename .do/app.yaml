@@ -1,0 +1,15 @@
+name: renovia-conseil
+region: fra
+static_sites:
+  - name: web
+    github:
+      repo: YOUR_GITHUB_USER/renovia-conseil
+      branch: main
+      deploy_on_push: true
+    build_command: echo "Static site — no build"
+    output_dir: /
+    index_document: index.html
+    error_document: index.html
+    catchall_document: index.html
+    routes:
+      - path: /
