@@ -1,0 +1,80 @@
+<?php
+header('Content-Type: text/html; charset=UTF-8');
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Politique de confidentialité — Renova Solaire</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a href="../index.php" class="logo">
+        <span class="logo__mark">☀</span>
+        <span class="logo__text">Renova <em>Solaire</em></span>
+      </a>
+    </div>
+  </header>
+  <main class="container legal-page">
+    <a href="../index.php" class="back-link">← Retour à l'accueil</a>
+    <h1>Politique de confidentialité</h1>
+    <p class="updated">Dernière mise à jour : juin <?php echo date('Y'); ?> · Conforme RGPD</p>
+
+    <h2>Responsable du traitement</h2>
+    <p>
+      Renova Solaire SAS — 12 avenue des Énergies, 75008 Paris, France<br>
+      contact@renova-conseil.com
+    </p>
+
+    <h2>Données collectées</h2>
+    <p>Nous collectons uniquement les données que vous nous transmettez volontairement :</p>
+    <ul>
+      <li>Identité : nom, prénom</li>
+      <li>Coordonnées : e-mail, téléphone, pays</li>
+      <li>Informations projet : type d'installation, puissance, surface</li>
+      <li>Données techniques : adresse IP, cookies (voir page Cookies)</li>
+    </ul>
+
+    <h2>Finalités</h2>
+    <ul>
+      <li>Répondre à vos demandes de renseignements</li>
+      <li>Vous mettre en relation avec des installateurs qualifiés</li>
+      <li>Améliorer nos services et mesurer l'audience du site</li>
+    </ul>
+
+    <h2>Base légale</h2>
+    <p>
+      Le traitement repose sur votre consentement (formulaire) et notre intérêt légitime
+      à développer notre activité de conseil.
+    </p>
+
+    <h2>Durée de conservation</h2>
+    <p>
+      Vos données sont conservées 3 ans à compter du dernier contact, sauf obligation légale
+      contraire.
+    </p>
+
+    <h2>Destinataires</h2>
+    <p>
+      Vos données peuvent être transmises à nos partenaires installateurs certifiés
+      uniquement avec votre accord explicite, dans le cadre de votre demande de devis.
+    </p>
+
+    <h2>Vos droits</h2>
+    <p>
+      Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement,
+      de limitation, de portabilité et d'opposition. Pour exercer vos droits :
+      contact@renova-conseil.com. Vous pouvez également introduire une réclamation auprès
+      de la CNIL (France) ou de l'autorité de protection des données de votre pays.
+    </p>
+  </main>
+  <footer class="footer">
+    <div class="container footer__bottom">
+      <p>© <?php echo date('Y'); ?> Renova Solaire · <a href="mentions.php">Mentions légales</a></p>
+    </div>
+  </footer>
+</body>
+</html>

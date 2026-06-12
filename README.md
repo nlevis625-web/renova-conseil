@@ -1,11 +1,11 @@
-# Renovia Conseil — Safepage
+# Renova Conseil — Safepage
 
 Site statique de rénovation énergétique (FR · BE · LU · CH).
 
 ## Structure
 
 ```
-renovia-conseil/
+renova-conseil/
 ├── index.html          # Page principale
 ├── css/style.css       # Styles
 ├── js/main.js          # Simulateur + formulaire
@@ -15,7 +15,7 @@ renovia-conseil/
 ## Prévisualisation locale
 
 ```powershell
-cd C:\Users\nlevi\Projects\renovia-conseil
+cd C:\Users\nlevi\Projects\renova-conseil
 python -m http.server 8080
 ```
 
@@ -26,17 +26,17 @@ Ouvrir http://localhost:8080
 Guide complet : **`deploy/DEPLOIEMENT-DIGITALOCEAN.md`**
 
 Résumé :
-1. Droplet Ubuntu → Nginx → `/var/www/renovia-conseil/`
+1. Droplet Ubuntu → Nginx → `/var/www/renova-conseil/`
 2. Cloudflare DNS : **A** `@` → IP du Droplet
-3. `certbot --nginx -d renovia-conseil.com -d www.renovia-conseil.com`
+3. `certbot --nginx -d renova-conseil.com -d www.renova-conseil.com`
 
 ## Domaine
 
-- **renovia-conseil.com** (actif)
+- **renova-conseil.com** (actif)
 
 ## Marque
 
-**Renovia Conseil** — cabinet indépendant en rénovation énergétique.
+**Renova Conseil** — cabinet indépendant en rénovation énergétique.
 Identité visuelle : vert forêt (#166534), typographie DM Sans + Instrument Serif.
 
 ## Notes
