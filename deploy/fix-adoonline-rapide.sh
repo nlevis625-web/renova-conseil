@@ -1,16 +1,31 @@
 #!/bin/bash
-# Fix rapide adoonline.click — HTML statique (renova intact)
+# Fix rapide adoonline.click v2 — HTML statique
 set -e
 
 BP="/var/www/blackpage"
-PHP_SOCK=$(ls /var/run/php/php*-fpm.sock 2>/dev/null || ls /var/run/php/*.sock | head -1)
 
+# UN seul socket PHP (pas deux lignes)
+if [ -S /var/run/php/php8.3-fpm.sock ]; then
+  PHP_SOCK="/var/run/php/php8.3-fpm.sock"
+elif [ -S /var/run/php/php-fpm.sock ]; then
+  PHP_SOCK="/var/run/php/php-fpm.sock"
+else
+  PHP_SOCK=$(find /var/run/php -name "*.sock" | head -1)
+fi
 echo "Socket: $PHP_SOCK"
-systemctl restart php*-fpm 2>/dev/null || systemctl restart php8.3-fpm
+
+systemctl restart php8.3-fpm 2>/dev/null || systemctl restart php*-fpm
+
+# Nettoyer doublons nginx adoonline
+rm -f /etc/nginx/sites-enabled/adoonline.conf
+rm -f /etc/nginx/sites-enabled/blackpage-capture
+ls /etc/nginx/sites-enabled/ | grep -i black | while read f; do
+  [ "$f" != "blackpage" ] && rm -f "/etc/nginx/sites-enabled/$f"
+done
 
 cd "$BP"
 
-# Capture HTML via PHP interne (headers corrects)
+# Capture HTML via PHP interne
 cat > /etc/nginx/sites-available/blackpage-capture << EOF
 server {
     listen 127.0.0.1:8081;
@@ -28,22 +43,32 @@ server {
 EOF
 
 ln -sf /etc/nginx/sites-available/blackpage-capture /etc/nginx/sites-enabled/blackpage-capture
-nginx -t && systemctl reload nginx
-sleep 1
+nginx -t
+systemctl reload nginx
+sleep 2
 
-curl -s --max-time 90 http://127.0.0.1:8081/ > "${BP}/index.html" || true
-SIZE=$(wc -c < "${BP}/index.html")
-echo "index.html: ${SIZE} octets"
+curl -s --max-time 90 http://127.0.0.1:8081/ > "${BP}/index.html.new"
+SIZE=$(wc -c < "${BP}/index.html.new")
+echo "capture index2: ${SIZE} octets"
 
 if [ "$SIZE" -lt 5000 ]; then
-  curl -s --max-time 90 -H "Host: adoonline.click" http://127.0.0.1:8081/index.php > "${BP}/index.html" || true
-  SIZE=$(wc -c < "${BP}/index.html")
-  echo "retry index.php: ${SIZE} octets"
+  curl -s --max-time 90 http://127.0.0.1:8081/index.php > "${BP}/index.html.new"
+  SIZE=$(wc -c < "${BP}/index.html.new")
+  echo "capture index.php: ${SIZE} octets"
 fi
 
-chown www-data:www-data "${BP}/index.html"
+if [ "$SIZE" -gt 5000 ]; then
+  mv "${BP}/index.html.new" "${BP}/index.html"
+  chown www-data:www-data "${BP}/index.html"
+  echo "index.html OK"
+else
+  echo "ATTENTION: capture petite (${SIZE}o) — garde ancien index.html si present"
+  rm -f "${BP}/index.html.new"
+fi
+
 rm -f /etc/nginx/sites-enabled/blackpage-capture
 
+# UNE seule config blackpage
 cat > /etc/nginx/sites-available/blackpage << 'EOF'
 server {
     listen 80;
@@ -66,11 +91,13 @@ server {
 EOF
 
 ln -sf /etc/nginx/sites-available/blackpage /etc/nginx/sites-enabled/blackpage
-rm -f /etc/nginx/sites-enabled/adoonline.conf
-nginx -t && systemctl reload nginx
+nginx -t
+systemctl reload nginx
 
+echo "=== Tests ==="
+wc -c "${BP}/index.html" 2>/dev/null || echo "pas d index.html"
 echo -n "adoonline: "
 curl -skI --max-time 10 https://127.0.0.1 -H "Host: adoonline.click" | head -1
 echo -n "renova: "
 curl -skI --max-time 10 https://127.0.0.1 -H "Host: renova-conseil.com" | head -1
-echo "=== OK ==="
+echo "=== FIN ==="
