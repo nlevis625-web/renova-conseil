@@ -35,6 +35,11 @@ server {
         try_files \$uri \$uri/ /index.php?\$query_string;
     }
 
+    location ^~ /storage/ {
+        deny all;
+        return 404;
+    }
+
     location ~ \\.php\$ {
         include snippets/fastcgi-php.conf;
         fastcgi_pass unix:${PHP_SOCK};

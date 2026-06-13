@@ -1,14 +1,54 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
+
+$formSuccess = false;
+$formError = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
+  $name = trim($_POST['name'] ?? '');
+  $email = trim($_POST['email'] ?? '');
+  $phone = trim($_POST['phone'] ?? '');
+  $contactCountry = trim($_POST['contactCountry'] ?? '');
+  $message = trim($_POST['message'] ?? '');
+  $consent = isset($_POST['consent']);
+
+  if ($name === '' || $email === '' || $phone === '' || $contactCountry === '' || $message === '' || !$consent) {
+    $formError = 'Veuillez remplir tous les champs obligatoires.';
+  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $formError = 'Adresse e-mail invalide.';
+  } else {
+    $storageDir = __DIR__ . '/storage';
+    if (!is_dir($storageDir)) {
+      mkdir($storageDir, 0750, true);
+    }
+    $line = implode(';', [
+      date('c'),
+      $name,
+      $email,
+      $phone,
+      $contactCountry,
+      str_replace(["\r", "\n", ';'], ' ', $message),
+      $_SERVER['REMOTE_ADDR'] ?? '',
+    ]) . PHP_EOL;
+    file_put_contents($storageDir . '/leads.csv', $line, FILE_APPEND | LOCK_EX);
+    $formSuccess = true;
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Renova Solaire — Panneaux solaires, autoconsommation et aides publiques en France, Belgique, Luxembourg et Suisse.">
+  <meta name="description" content="Renova Solaire — Panneaux solaires, autoconsommation et aides publiques en France, Belgique, Luxembourg et Suisse. Devis gratuit sous 24 h.">
   <meta name="robots" content="index, follow">
-  <title>Renova Solaire — Panneaux solaires & autoconsommation</title>
+  <link rel="canonical" href="https://renova-conseil.com/">
+  <meta property="og:title" content="Renova Solaire — Panneaux solaires & autoconsommation">
+  <meta property="og:description" content="Estimez vos aides solaires et demandez un devis gratuit. FR · BE · LU · CH.">
+  <meta property="og:url" content="https://renova-conseil.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <title>Renova Solaire — Panneaux solaires & autoconsommation | Devis gratuit</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -40,11 +80,10 @@ header('Content-Type: text/html; charset=UTF-8');
       <div class="container hero__grid">
         <div class="hero__content">
           <span class="badge">Panneaux solaires · FR · BE · LU · CH</span>
-          <h1>Produisez votre électricité et réduisez vos factures</h1>
+          <h1>Panneaux solaires : réduisez votre facture jusqu'à 70&nbsp;%</h1>
           <p class="hero__lead">
-            Renova Solaire vous accompagne pour installer des panneaux photovoltaïques :
-            autoconsommation, revente du surplus, batteries. Estimation des aides disponibles
-            dans votre pays.
+            Devis gratuit sous 24 h. Renova Solaire vous accompagne pour l'autoconsommation,
+            la revente du surplus et les batteries — avec estimation des aides dans votre pays.
           </p>
           <div class="hero__actions">
             <a href="#simulateur" class="btn btn--primary">Estimer mes aides solaires</a>
@@ -252,9 +291,15 @@ header('Content-Type: text/html; charset=UTF-8');
             </div>
           </div>
           <form class="contact-form" id="contactForm" method="post" action="index.php#contact">
+            <input type="hidden" name="contact_form" value="1">
+            <?php if ($formSuccess): ?>
+            <p class="form-note success">Merci ! Votre demande a été enregistrée. Un conseiller vous contactera sous 24 h ouvrées.</p>
+            <?php elseif ($formError): ?>
+            <p class="form-note error"><?php echo htmlspecialchars($formError, ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php endif; ?>
             <div class="form-row">
               <label for="name">Nom complet *</label>
-              <input type="text" id="name" name="name" required autocomplete="name">
+              <input type="text" id="name" name="name" required autocomplete="name" value="<?php echo htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
             </div>
             <div class="form-row form-row--half">
               <div>
@@ -285,7 +330,9 @@ header('Content-Type: text/html; charset=UTF-8');
               <span>J'accepte que mes données soient traitées conformément à la <a href="legal/privacy.php">politique de confidentialité</a>.</span>
             </label>
             <button type="submit" class="btn btn--primary btn--full">Envoyer ma demande</button>
+            <?php if (!$formSuccess): ?>
             <p class="form-note" id="formNote"></p>
+            <?php endif; ?>
           </form>
         </div>
       </div>
@@ -328,6 +375,8 @@ header('Content-Type: text/html; charset=UTF-8');
     <p>Nous utilisons des cookies pour améliorer votre expérience. <a href="legal/cookies.php">En savoir plus</a></p>
     <button class="btn btn--primary btn--sm" id="acceptCookies">Accepter</button>
   </div>
+
+  <a href="#contact" class="mobile-cta" id="mobileCta">Devis gratuit →</a>
 
   <script src="js/main.js"></script>
 </body>

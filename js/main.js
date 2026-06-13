@@ -94,12 +94,31 @@
   var contactForm = document.getElementById("contactForm");
   var formNote = document.getElementById("formNote");
 
-  if (contactForm) {
-    contactForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      formNote.textContent = "Merci ! Votre demande a été enregistrée. Un conseiller vous contactera sous 24 h ouvrées.";
-      formNote.className = "form-note success";
-      contactForm.reset();
+  if (contactForm && formNote && !formNote.classList.contains("success")) {
+    contactForm.addEventListener("submit", function () {
+      var btn = contactForm.querySelector('button[type="submit"]');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Envoi en cours…";
+      }
     });
+  }
+
+  var mobileCta = document.getElementById("mobileCta");
+  var contactSection = document.getElementById("contact");
+
+  if (mobileCta && contactSection) {
+    var toggleMobileCta = function () {
+      var rect = contactSection.getBoundingClientRect();
+      var hide = rect.top < window.innerHeight * 0.6;
+      mobileCta.classList.toggle("hidden", hide);
+    };
+    window.addEventListener("scroll", toggleMobileCta, { passive: true });
+    toggleMobileCta();
+  }
+
+  if (window.location.hash === "#contact" || document.querySelector(".form-note.success")) {
+    var target = document.getElementById("contact");
+    if (target) target.scrollIntoView({ behavior: "smooth" });
   }
 })();

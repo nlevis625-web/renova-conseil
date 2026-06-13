@@ -1,9 +1,9 @@
 :root {
-  --green-900: #0f3d2a;
-  --green-800: #166534;
-  --green-700: #15803d;
-  --green-100: #dcfce7;
-  --green-50: #f0fdf4;
+  --green-900: #422006;
+  --green-800: #b45309;
+  --green-700: #d97706;
+  --green-100: #fef3c7;
+  --green-50: #fffbeb;
   --sand: #faf8f5;
   --stone: #78716c;
   --stone-light: #e7e5e4;
@@ -733,4 +733,38 @@ a:hover { text-decoration: underline; }
   .hero { padding: 48px 0 64px; }
   .section { padding: 56px 0; }
   .simulator { padding: 28px; }
+
+  .mobile-cta { display: flex; }
+}
+
+.mobile-cta {
+  display: none;
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+  background: var(--green-800);
+  color: var(--white);
+  padding: 14px 28px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  box-shadow: 0 8px 32px rgba(66, 32, 6, 0.25);
+}
+
+.mobile-cta:hover {
+  background: var(--green-900);
+  color: var(--white);
+  text-decoration: none;
+}
+
+.mobile-cta.hidden { display: none !important; }
+
+.form-note.error {
+  color: #b91c1c;
+  background: #fef2f2;
+  padding: 12px;
+  border-radius: 8px;
 }
