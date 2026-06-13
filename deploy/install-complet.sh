@@ -49,7 +49,7 @@ NGINXEOF
 
 rm -f /etc/nginx/sites-enabled/default
 rm -f /etc/nginx/sites-enabled/renovia*
-rm -f /etc/nginx/sites-enabled/adoonline*
+# adoonline : ne pas supprimer — site separe sur /var/www/blackpage
 rm -f /etc/nginx/sites-enabled/pop3
 ln -sf /etc/nginx/sites-available/renova-conseil.conf /etc/nginx/sites-enabled/
 
