@@ -1,0 +1,18 @@
+🔒 ADOONLINE — NE TOUCHE PLUS RIEN
+===================================
+Enregistré le 14 juin 2026
+
+SITE : https://adoonline.click/
+SERVEUR : DigitalOcean — 159.89.50.166
+DOSSIER SERVEUR : /var/www/blackpage/
+
+TYPE : HTML statique (index.html + loader.js + app.bundle.js)
+NE PAS remettre index.php / index2.php (ça casse le site).
+
+SAUVEGARDE LOCALE :
+  Bureau\adoonline-site-complet\
+  Bureau\adoonline-site-complet.zip
+  Bureau\adoonline\index.html
+
+NE PLUS MODIFIER.
+NE PLUS LANCER : DEPLOY.bat, reparer-adoonline, fix-adoonline*.sh
