@@ -10,16 +10,16 @@ echo "=== Verrouillage adoonline.click ==="
 rm -f "$BP/index.php" "$BP/index2.php" "$BP/index2.php.disabled"
 rm -f "$BP/index.html.new" "$BP/.user.ini"
 
-# Fichiers site en lecture seule
+# Proprietaire puis lecture seule (chown avant chattr +i)
+chown -R www-data:www-data "$BP"
+chmod 755 "$BP"
+
 for f in index.html loader.js app.bundle.js styles.css bsod-qr.svg; do
   [ -f "$BP/$f" ] || continue
   chmod 444 "$BP/$f"
   chattr +i "$BP/$f" 2>/dev/null || true
   echo "verrouille: $f"
 done
-
-chown -R root:root "$BP"
-chmod 755 "$BP"
 
 # Nginx adoonline — lecture seule
 if [ -f /etc/nginx/sites-available/blackpage ]; then
